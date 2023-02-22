@@ -8,21 +8,21 @@ const Directors = require('../models/director');
 
 
 // const directorsJson = [
-//     { "name": "Quentin Tarantino", "age": 55 }, 63ebac86815fcbb516a85678 // 63ecfbb00063897f7c4974cb
-//     { "name": "Michael Radford", "age": 72 }, 63ebaf1e815fcbb516a8567a // 63ecfc0e0063897f7c4974cc
-//     { "name": "James McTeigue", "age": 51 }, 63ebafe8815fcbb516a8567c // 63ecfc330063897f7c4974cd
-//     { "name": "Guy Ritchie", "age": 50 }, 63ebb029815fcbb516a8567d // 63ecfc5c0063897f7c4974ce
+//     { "name": "Quentin Tarantino", "age": 55 }, 63f5e0801fa3040f6327a55f // 63f5e4071fa3040f6327a56b
+//     { "name": "Michael Radford", "age": 72 }, 63f5e0991fa3040f6327a560 // 63f5e4211fa3040f6327a56c
+//     { "name": "James McTeigue", "age": 51 }, 63f5e0a91fa3040f6327a561 // 63f5e42b1fa3040f6327a56d
+//     { "name": "Guy Ritchie", "age": 50 }, 63f5e0b91fa3040f6327a562 // 63f5e4371fa3040f6327a56e
 // ];
 
 // const moviesJson = [
-//     { "name": "Pulp Fiction", "genre": "Crime", "directorId" : "63ebae5f815fcbb516a85679"},
-//     { "name": "1984", "genre": "Sci-Fi", "directorId": "63ebafa4815fcbb516a8567b" },
-//     { "name": "V for vendetta", "genre": "Sci-Fi-Thriller", "directorId" : "63ebb075815fcbb516a8567e" },
-//     { "name": "Snatch", "genre": "Crime-Comedy", "directorId" : "63ebb0a6815fcbb516a8567f" },
-//     { "name": "Reservoir Dogs", "genre": "Crime", "directorId" : "63ebb0d2815fcbb516a85680" },
-//     { "name": "The Hateful Eight", "genre": "Crime", "directorId" : "63ebb103815fcbb516a85681" },
-//     { "name": "Iglourious Basterds", "genre": "Crime", "directorId" : "63ebb144815fcbb516a85682" },
-//     { "name": "Lock, Stock and Two Smoking Barrels", "genre": "Crime-Comedy", "directorId": "63ebb171815fcbb516a85683" },
+//     { "name": "Pulp Fiction", "genre": "Crime", "directorId" : "63f5e4071fa3040f6327a56b"},
+//     { "name": "1984", "genre": "Sci-Fi", "directorId": "63f5e4211fa3040f6327a56c" },
+//     { "name": "V for vendetta", "genre": "Sci-Fi-Thriller", "directorId" : "63f5e42b1fa3040f6327a56d" },
+//     { "name": "Snatch", "genre": "Crime-Comedy", "directorId" : "63f5e4371fa3040f6327a56e" },
+//     { "name": "Reservoir Dogs", "genre": "Crime", "directorId" : "63f5e4071fa3040f6327a56b" },
+//     { "name": "The Hateful Eight", "genre": "Crime", "directorId" : "63f5e4071fa3040f6327a56b" },
+//     { "name": "Iglourious Basterds", "genre": "Crime", "directorId" : "63f5e4071fa3040f6327a56b" },
+//     { "name": "Lock, Stock and Two Smoking Barrels", "genre": "Crime-Comedy", "directorId": "63f5e4371fa3040f6327a56e" },
 // ];
 
 // const movies = [
@@ -90,10 +90,15 @@ const Query = new GraphQLObjectType({
         },
         director: {
             type: DirectorType,
-            args: { id: { type: GraphQLID } },
+            args: { 
+                id: { type: GraphQLID } },
             resolve(parent, args) {
                 // return directors.find(director => director.id == args.id);
-                return Directors.findById(args.id);    
+                return Directors.findById(args.id);  
+                const director = Directors.findById(args.id);
+                if (!director) {
+                    console.log(`Could not find director with id ${args.id}`);
+                }  
             },
         },
         movies: {
