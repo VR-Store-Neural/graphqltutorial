@@ -43,23 +43,6 @@ const Directors = require('../models/director');
 //     {id: '4', name: 'Guy Ritchie', age: 50 },
 // ];
 
-const MovieType = new GraphQLObjectType({
-    name: 'Movie',
-    fields: () => ({
-        id: { type: GraphQLID },
-        name: { type: GraphQLString },
-        genre: { type: GraphQLString },
-        director: {
-            type: DirectorType,
-            resolve(parent, args) {
-                // return directors.find(director => director.id == parent.id); 
-                return Directors.findById(parent.directorId); 
-            }
-        }
-    }),
-});
-
-
 const DirectorType = new GraphQLObjectType({
     name: 'Director',
     fields: () => ({
@@ -69,13 +52,26 @@ const DirectorType = new GraphQLObjectType({
         movies: {
             type: new GraphQLList(MovieType),
             resolve(parent, args) {
-                // return movies.filter(movie => movie.directorId === parent.id); 
                 return Movies.find({ directorId: parent.id });
             },
         },
     }),
 });
 
+const MovieType = new GraphQLObjectType({
+    name: 'Movie',
+    fields: () => ({
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        genre: { type: GraphQLString },
+        director: {
+            type: DirectorType,
+            resolve(parent, args) { 
+                return Directors.findById(parent.directorId); 
+            }
+        }
+    }),
+});
 
 const Query = new GraphQLObjectType({
     name: 'Query',
@@ -83,40 +79,34 @@ const Query = new GraphQLObjectType({
         movie: {
             type: MovieType,
             args: { id: { type: GraphQLID } },
-            resolve(parent, args) {
-                // return movies.find(movie => movie.id == args.id);    
+            resolve(parent, args) {    
                 return Movies.findById(args.id);
-            },
+                },
         },
         director: {
             type: DirectorType,
             args: { 
                 id: { type: GraphQLID } },
             resolve(parent, args) {
-                // return directors.find(director => director.id == args.id);
                 return Directors.findById(args.id);  
-                const director = Directors.findById(args.id);
-                if (!director) {
-                    console.log(`Could not find director with id ${args.id}`);
-                }  
+                },  
             },
         },
         movies: {
             type: new GraphQLList(MovieType),
                 resolve(parent, args) {
-                    // return movies;
-                    return Movies.find({});    
+                    return Movies.find({});
             }
         },
         directors: {
             type: new GraphQLList(DirectorType),
                 resolve(parent, args) {
-                    // return directors; 
                     return Directors.find({});    
             }
         },
+        
     }
-});
+);
 
 module.exports = new GraphQLSchema({
     query: Query, 

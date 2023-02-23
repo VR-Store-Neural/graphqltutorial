@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const app = express();
 const PORT = 3005;
 
-mongoose.connect('mongodb+srv://Sasha:Pass2911@cluster0.6sidyvh.mongodb.net/graphql-tutorial?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://Sasha:Pass2911@cluster0.6sidyvh.mongodb.net/Cluster0?retryWrites=true&w=majority',
 {useNewUrlParser: true }) 
         .then(() => {
           console.log('Connected to MongoDB');
